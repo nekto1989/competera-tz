@@ -1,0 +1,16 @@
+---
+- name: install webserver & DB / configuration
+  hosts: all
+  become: true
+  gather_facts: false
+  pre_tasks:
+    - raw: sudo apt-get -y install python-simplejson
+    - action: setup
+
+  roles:
+  #  - common
+  #  - { role: postgresql, become: yes }
+    - application
+    - { role: virtualenv, become: yes }
+    - nginx
+    - postinstall

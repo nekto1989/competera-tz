@@ -1,0 +1,18 @@
+
+Vagrant.configure("2") do |config|
+  config.vm.define 'competera_tz' do |competera_tz|
+    competera_tz.vm.synced_folder ".", "/vagrant", disabled: true
+    competera_tz.vm.box = "ubuntu/xenial64"
+    competera_tz.vm.network :forwarded_port, guest: 80, host: 8080
+    competera_tz.vm.provider 'virtualbox' do |vb|
+      vb.memory = '2048'
+      vb.cpus = 1
+    end
+
+      # Enable and configure the ansible provisioner'
+      competera_tz.vm.provision "ansible" do |ansible|
+        ansible.verbose = "v"
+        ansible.playbook = "./install.yml"
+      end
+    end
+  end
