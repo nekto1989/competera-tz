@@ -28,7 +28,7 @@
   - name: copy local_settings.py
     become: true
     become_user: '{{ username }}'
-    action: template src=config/{{ item }}j2 dest={{ project_homedir }}/{{ project_slug }}/{{ item }} group={{ username }} owner={{ username }}
+    action: template src=config/{{ item }}.j2 dest={{ project_homedir }}/{{ project_slug }}/{{ item }} group={{ username }} owner={{ username }}
     with_items:
       - local_settings.py
 #- name: syncdb (for django<1.7)

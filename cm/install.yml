@@ -8,9 +8,9 @@
     - action: setup
 
   roles:
-  #  - common
-  #  - { role: postgresql, become: yes }
+    - common
+    - { role: postgresql, become: yes }
     - application
     - { role: virtualenv, become: yes }
-    - nginx
-    - postinstall
+  #  - nginx
+  #  - postinstall
