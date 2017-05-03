@@ -1,0 +1,4 @@
+---
+
+  - name: copy uwsg file
+    template: src=uwsgi.j2 dest={{ project_homedir }}/uwsgi.{{ project_slug }}.ini

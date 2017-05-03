@@ -1,0 +1,12 @@
+# Ignore install.retry
+
+install.retry
+
+# Ignore .vagrant/ folder
+
+vagrant/.vagrant/
+vagrant/.vagrant/**
+.vagrant/
+
+# ignore logs
+*.log

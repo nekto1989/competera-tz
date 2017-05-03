@@ -1,0 +1,9 @@
+---
+- name: Install nginx
+  become: yes
+  pip: name=supervisor
+
+- name: copy supervisor config
+  template: src=supervisord.conf.j2 dest=/etc/supervisor/conf.d/{{ project_url }}.conf
+  notify:
+    - restart site
