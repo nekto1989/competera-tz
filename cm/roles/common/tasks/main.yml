@@ -30,8 +30,34 @@
     - python-imaging
     - python-pip
     - python-virtualenv
-    - uwsgi
-    - uwsgi-plugin-python
     - libpq-dev
     - libcurl4-openssl-dev
     - build-essential
+
+- name: add user
+  become: yes
+  user: name={{ username }} generate_ssh_key=yes shell=/bin/bash ssh_key_comment={{ username }}@{{ inventory_hostname }}
+
+- name: create project directory
+  become: yes
+  file: path={{ project_dir }} state=directory group={{ username }} owner={{ username }}
+
+- name: create logs directory
+  become: yes
+  file: path={{ project_dir }}/logs state=directory group={{ username }} owner={{ username }}
+
+- name: clone project from repo
+  become: true
+  become_user: '{{ username }}'
+  git:
+    repo: '{{ repo }}'
+    dest: '{{ project_homedir }}'
+    accept_hostkey: true
+  register: git
+
+- name: copy local_settings.py
+  become: true
+  become_user: '{{ username }}'
+  action: template src=config/{{ item }}.j2 dest={{ project_homedir }}/{{ project_slug }}/{{ item }} group={{ username }} owner={{ username }}
+  with_items:
+    - '{{ local_settings }}'

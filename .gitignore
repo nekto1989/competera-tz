@@ -1,2 +1,2 @@
 local_settings.py
-group_vars/all
+static/*

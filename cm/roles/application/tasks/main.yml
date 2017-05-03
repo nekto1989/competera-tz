@@ -1,36 +1,26 @@
 ---
-  - name: add user
-    become: yes
-    user: name={{ username }} generate_ssh_key=yes shell=/bin/bash ssh_key_comment={{ username }}@{{ inventory_hostname }}
-
-  - name: create project directory
-    become: yes
-    file: path={{ project_dir }} state=directory group={{ username }} owner={{ username }}
-
-#  - name: create logs directory
-#    become: yes
-#    file: path={{ project_dir }}/logs state=directory group={{ username }} owner={{ username }}
-
-  - name: clone project from repo
+  - name: Make manage.py executable
     become: true
     become_user: '{{ username }}'
-    git:
-      repo: '{{ repo }}'
-      dest: '{{ project_homedir }}'
-      accept_hostkey: true
-    register: git
+    file:
+      path: "{{ project_homedir }}/manage.py"
+      mode: 0755
 
-  - name: copy local_settings.py
+  - name: create demo db & config
     become: true
     become_user: '{{ username }}'
-    action: template src=config/{{ item }}.j2 dest={{ project_homedir }}/{{ project_slug }}/{{ item }} group={{ username }} owner={{ username }}
+    django_manage:
+      command: "{{ item }} --noinput"
+      app_path: "{{ project_homedir }}"
+      virtualenv: "{{ virtualenv_path }}"
+    run_once: true
     with_items:
-      - '{{ local_settings }}'
+      - createdb
 
-#  - name: create media directory
-#    become: yes
-#    file: path={{ project_dir }}/media state=directory group={{ username }} owner={{ username }}
-
-#  - name: create `uploads` directory
-#    become: yes
-#    file: path={{ project_dir }}/media/uploads state=directory group={{ username }} owner={{ username }}
+  - name: collectstatic
+    become: true
+    become_user: '{{ username }}'
+    django_manage:
+      command: collectstatic
+      app_path: "{{ project_homedir }}"
+      virtualenv: "{{ virtualenv_path }}"
