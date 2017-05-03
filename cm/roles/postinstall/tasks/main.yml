@@ -1,9 +1,16 @@
 ---
+  - name: Make manage.py executable
+    become: true
+    become_user: '{{ username }}'
+    file:
+      path: "{{ project_homedir }}/manage.py"
+      mode: 0755
+
   - name: create demo db & config
     become: true
     become_user: '{{ username }}'
     django_manage:
-      command: "{{ item }}"
+      command: "{{ item }} --noinput"
       app_path: "{{ project_homedir }}"
       virtualenv: "{{ virtualenv_path }}"
     run_once: true
