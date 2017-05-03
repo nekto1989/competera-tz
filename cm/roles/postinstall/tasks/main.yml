@@ -1,1 +1,11 @@
 ---
+  - name: create demo db & config
+    become: true
+    become_user: '{{ username }}'
+    django_manage:
+      command: "{{ item }}"
+      app_path: "{{ project_homedir }}"
+      virtualenv: "{{ virtualenv_path }}"
+    run_once: true
+    with_items:
+      - createdb

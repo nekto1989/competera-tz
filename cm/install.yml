@@ -13,4 +13,4 @@
     - application
     - { role: virtualenv, become: yes }
   #  - nginx
-  #  - postinstall
+    - postinstall
