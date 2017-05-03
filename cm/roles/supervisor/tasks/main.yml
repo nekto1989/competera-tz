@@ -1,9 +1,12 @@
 ---
-- name: Install nginx
+- name: install packages
   become: yes
-  pip: name=supervisor
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - supervisor
 
 - name: copy supervisor config
+  become: yes
   template: src=supervisord.conf.j2 dest=/etc/supervisor/conf.d/{{ project_url }}.conf
   notify:
     - restart site

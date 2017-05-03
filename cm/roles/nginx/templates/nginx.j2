@@ -1,33 +1,26 @@
 server {
+   listen          80;
+   server_name     ~^(.+)$, {{ project_url }};
+   root           {{ project_dir }}/{{ project_slug }};
 
-        root {{ project_dir }}/{{ project_slug }};
+   gzip             on;
+   gzip_min_length  1000;
+   gzip_proxied     expired no-cache no-store private auth;
+   gzip_types       text/plain application/xml;
 
-        access_log {{ project_dir }}/logs/nginx-access.log;
-        error_log {{ project_dir }}/logs/nginx-errors.log;
-
-        server_name {{ project_url }};
-
-        gzip             on;
-        gzip_min_length  1000;
-        gzip_proxied     expired no-cache no-store private auth;
-        gzip_types       text/plain application/xml;
-
-        location / {
-                include uwsgi_params;
-                uwsgi_pass 127.0.0.1:{{ uwsgi_port }};
+   location / {
+        include uwsgi_params;
+        uwsgi_pass 127.0.0.1:{{ uwsgi_port }};
         }
 
-        location /static {
-                root {{ project_dir }};
+    location /static {
+        root {{ project_homedir }};
         }
 
-        location /media {
-                root {{ project_dir }};
+    location /robots.txt {
+        root {{ project_homedir }}/static;
         }
 
-        location /robots.txt {
-                root {{ project_dir }};
-        }
-
-
+   access_log       /var/log/nginx/{{ project_url }}-access.log;
+   error_log        /var/log/nginx/{{ project_url }}-errors.log;
 }

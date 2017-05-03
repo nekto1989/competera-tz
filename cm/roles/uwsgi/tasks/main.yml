@@ -1,4 +1,11 @@
 ---
+- name: install packages
+  become: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - uwsgi
+    - uwsgi-plugin-python
 
-  - name: copy uwsg file
-    template: src=uwsgi.j2 dest={{ project_homedir }}/uwsgi.{{ project_slug }}.ini
+- name: copy uwsgi file
+  become: yes
+  template: src=uwsgi.j2 dest={{ project_homedir }}/uwsgi.{{ project_slug }}.ini group={{ username }} owner={{ username }}

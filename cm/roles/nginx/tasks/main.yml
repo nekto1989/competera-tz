@@ -18,7 +18,5 @@
 - name: remove /etc/nginx/sites-enabled/default
   become: yes
   file: path=/etc/nginx/sites-enabled/default state=absent
-
-- name: restart nginx
-  become: yes
-  service: name=nginx state=restarted
+  notify:
+    - restart nginx

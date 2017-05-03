@@ -1,0 +1,4 @@
+---
+- name: restart site
+  become: yes
+  supervisorctl: name={{ project_url }} state=restarted

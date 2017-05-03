@@ -10,7 +10,8 @@
   roles:
     - common
     - { role: postgresql, become: yes }
-    - application
     - { role: virtualenv, become: yes }
-  #  - nginx
-    - postinstall
+    - application
+    - uwsgi
+    - supervisor
+    - nginx
